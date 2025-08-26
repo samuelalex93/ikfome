@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+
+/* Variáveis de cor */
+:root {
+  --amarelo: #FFD700;
+  --laranja: #FF8C00;
+  --vermelho: #FF0000;
+  --rosa-claro: #FFB6C1;
+  --rosa-escuro: #C71585;
+  --roxo: #800080;
+  --azul: #1E90FF;
+  --verde: #32CD32;
+  --branco: #FFFFFF;
+  --preto: #000000;
+}
+
+/* Text Colors */
+.text-amarelo { color: var(--amarelo); }
+.text-laranja { color: var(--laranja); }
+.text-vermelho { color: var(--vermelho); }
+.text-rosa-claro { color: var(--rosa-claro); }
+.text-rosa-escuro { color: var(--rosa-escuro); }
+.text-roxo { color: var(--roxo); }
+.text-azul { color: var(--azul); }
+.text-verde { color: var(--verde); }
+.text-branco { color: var(--branco); }
+.text-preto { color: var(--preto); }
+
+/* Background Colors */
+.bg-amarelo { background-color: var(--amarelo); }
+.bg-laranja { background-color: var(--laranja); }
+.bg-vermelho { background-color: var(--vermelho); }
+.bg-rosa-claro { background-color: var(--rosa-claro); }
+.bg-rosa-escuro { background-color: var(--rosa-escuro); }
+.bg-roxo { background-color: var(--roxo); }
+.bg-azul { background-color: var(--azul); }
+.bg-verde { background-color: var(--verde); }
+.bg-branco { background-color: var(--branco); }
+.bg-preto { background-color: var(--preto); }
+
+/* Border Colors */
+.border-amarelo { border-color: var(--amarelo); }
+.border-laranja { border-color: var(--laranja); }
+.border-vermelho { border-color: var(--vermelho); }
+.border-rosa-claro { border-color: var(--rosa-claro); }
+.border-rosa-escuro { border-color: var(--rosa-escuro); }
+.border-roxo { border-color: var(--roxo); }
+.border-azul { border-color: var(--azul); }
+.border-verde { border-color: var(--verde); }
+.border-branco { border-color: var(--branco); }
+.border-preto { border-color: var(--preto); }
