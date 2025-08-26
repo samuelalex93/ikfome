@@ -40,3 +40,6 @@ Thumbs.db
 # Swagger/Tsoa temporários (caso não queira versionar)
 src/routes/
 dist/swagger.json
+
+/generated/prisma
+*.db

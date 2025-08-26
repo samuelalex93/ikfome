@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "prisma generate",
     "build:routes": "tsoa routes",
     "build:spec": "tsoa spec",
     "build:ts": "tsc",
@@ -15,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^6.14.0",
     "body-parser": "^2.2.0",
     "express": "^5.1.0",
     "joi": "^18.0.1",

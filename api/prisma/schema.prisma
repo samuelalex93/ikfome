@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(CUSTOMER)
+  addresses    Address[]
+  orders       Order[]
+  createdAt    DateTime  @default(now())
+
+  @@map("user")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+model Restaurant {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  logoUrl     String?
+  coverUrl    String?
+  rating      Float    @default(0)
+  deliveryFee Int      @default(0) // em centavos
+  items       Item[]
+  orders      Order[]
+  isOpen      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@map("restaurant")
+}
+
+model Item {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  name         String
+  description  String?
+  price        Int // centavos
+  imageUrl     String?
+  category     String
+  options      Json? // adicionais, observações
+  createdAt    DateTime   @default(now())
+
+  @@map("item")
+}
+
+model Order {
+  id            String        @id @default(cuid())
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  restaurantId  String
+  restaurant    Restaurant    @relation(fields: [restaurantId], references: [id])
+  items         OrderItem[]
+  status        OrderStatus   @default(RECEIVED)
+  subtotal      Int
+  deliveryFee   Int
+  discount      Int           @default(0)
+  total         Int
+  paymentMethod PaymentMethod
+  address       Json // snapshot do endereço no momento do pedido
+  createdAt     DateTime      @default(now())
+
+  @@map("order")
+}
+
+enum OrderStatus {
+  RECEIVED
+  PREPARING
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELED
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  CASH
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+
+  @@map("orderItem")
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  street     String
+  number     String
+  city       String
+  state      String
+  zipCode    String
+  complement String?
+  createdAt  DateTime @default(now())
+
+  @@map("address")
+}
