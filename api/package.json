@@ -6,6 +6,7 @@
   "scripts": {
     "prisma:migrate": "prisma migrate dev",
     "prisma:generate": "prisma generate",
+    "prisma:seed": "ts-node prisma/seed.ts",
     "build:routes": "tsoa routes",
     "build:spec": "tsoa spec",
     "build:ts": "tsc",
