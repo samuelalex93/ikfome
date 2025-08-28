@@ -1,4 +1,4 @@
-import { Controller, Route, Get, Query, Path } from "tsoa";
+import { Controller, Route, Get, Query, Path, Tags } from "tsoa";
 
 interface Restaurant {
   id: string;
@@ -14,6 +14,7 @@ interface Item {
 }
 
 @Route("restaurants")
+@Tags("Restaurants")
 export class RestaurantController extends Controller {
 
   @Get()

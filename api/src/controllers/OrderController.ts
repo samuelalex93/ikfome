@@ -1,4 +1,4 @@
-import { Controller, Route, Post, Get, Put, Body, Path } from "tsoa";
+import { Controller, Route, Post, Get, Put, Body, Path, Tags } from "tsoa";
 
 interface OrderItem {
   id: string;
@@ -27,6 +27,7 @@ interface UpdateStatusBody {
 }
 
 @Route("orders")
+@Tags("Orders")
 export class OrderController extends Controller {
 
   @Post()

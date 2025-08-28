@@ -1,4 +1,4 @@
-import { Controller, Route, Post, Body } from "tsoa";
+import { Controller, Route, Post, Body, Tags } from "tsoa";
 
 interface ValidateCouponBody {
   code: string;
@@ -11,6 +11,7 @@ interface ValidateCouponResponse {
 }
 
 @Route("coupons")
+@Tags("Coupons")
 export class CouponController extends Controller {
 
   @Post("validate")
