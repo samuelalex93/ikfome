@@ -1,8 +1,7 @@
-import { Controller, Get, Route, Tags, Post, Body, Path } from "tsoa";
-import { User } from "@prisma/client";
+import { Controller, Get, Route, Tags, Post, Body, Path, Put } from "tsoa";
 
 import { UserService } from "../services/UserService";
-
+import { CreateUserDto, UpdateUserDto, UserType, SafeUser } from "../types/UserTypes";
 @Route("users")
 @Tags("Users")
 export class UserController extends Controller {
@@ -14,21 +13,27 @@ export class UserController extends Controller {
   }
 
   @Get("{id}")
-  public async getUser(@Path() id: string): Promise<User | null> {
+  public async getUser(@Path() id: string): Promise<UserType | null> {
     return this.userService.getUserById(id);
   }
 
   @Post("register")
   public async register(
-    @Body() body: { name: string; email: string; password: string }
-  ): Promise<User> {
-    // gerar hash da senha
-    const passwordHash = "hash_fake_" + body.password; 
-    return this.userService.registerUser(body.name, body.email, passwordHash);
+    @Body() body: CreateUserDto
+  ): Promise<SafeUser> {
+    return this.userService.registerUser(body.name, body.email, body.password);
+  }
+
+  @Put("{id}")
+  async updateUser(
+    @Path() id: string,
+    @Body() data: UpdateUserDto
+  ): Promise<SafeUser> {
+    return this.userService.updateUser(id, data)
   }
 
   @Get()
-  public async listUsers(): Promise<User[]> {
+  public async listUsers(): Promise<UserType[]> {
     return this.userService.listUsers();
   }
 }

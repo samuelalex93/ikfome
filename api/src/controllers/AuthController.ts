@@ -1,46 +1,20 @@
-import { Controller, Route, Post, Body } from "tsoa";
-
-interface RegisterBody {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface LoginBody {
-  email: string;
-  password: string;
-}
-
-interface TokenResponse {
-  accessToken: string;
-  refreshToken: string;
-}
-
-interface RefreshBody {
-  refreshToken: string;
-}
-
+import { Controller, Route, Post, Body, Tags } from "tsoa";
+import { AuthService } from "../services/AuthService";
+import { LoginDto, TokenResponse } from "../types/AuthTypes";
 @Route("auth")
+@Tags("Auth")
 export class AuthController extends Controller {
+  private authService: AuthService;
 
-  @Post("register")
-  public async register(@Body() body: RegisterBody): Promise<{ message: string }> {
-    return { message: `User ${body.name} registered successfully (mock)` };
+  constructor() {
+    super();
+    this.authService = new AuthService();
   }
 
   @Post("login")
-  public async login(@Body() body: LoginBody): Promise<TokenResponse> {
-    return {
-      accessToken: "mockAccessToken123",
-      refreshToken: "mockRefreshToken456"
-    };
-  }
-
-  @Post("refresh")
-  public async refresh(@Body() body: RefreshBody): Promise<TokenResponse> {
-    return {
-      accessToken: "newMockAccessToken789",
-      refreshToken: body.refreshToken
-    };
+  public async login(@Body() body: LoginDto): Promise<TokenResponse> {
+    const {email, password} = body
+    const result = await this.authService.login(email, password);
+    return result;
   }
 }
