@@ -1,13 +1,14 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from "../src/config/prisma"
 
-const prisma = new PrismaClient();
+import { cryptHash } from "../src/utils/cryptHash";
 
 async function main() {
+  const passUser1 = await cryptHash("joao123")
   const user1 = await prisma.user.create({
     data: {
       name: "João Silva",
       email: "joao@example.com",
-      passwordHash: "hashed_password_joao",
+      password: passUser1,
       role: "CUSTOMER",
       addresses: {
         create: [
@@ -22,12 +23,12 @@ async function main() {
       }
     }
   });
-
+  const passadmin = await cryptHash("maria123")
   const admin = await prisma.user.create({
     data: {
       name: "Maria Admin",
       email: "maria@example.com",
-      passwordHash: "hashed_password_maria",
+      password: passadmin,
       role: "ADMIN"
     }
   });
