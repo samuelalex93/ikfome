@@ -23,7 +23,7 @@
 					"role": {
 						"$ref": "#/components/schemas/_36_Enums.Role"
 					},
-					"passwordHash": {
+					"password": {
 						"type": "string"
 					},
 					"email": {
@@ -39,7 +39,7 @@
 				"required": [
 					"createdAt",
 					"role",
-					"passwordHash",
+					"password",
 					"email",
 					"id",
 					"name"
@@ -49,6 +49,79 @@
 			"User": {
 				"$ref": "#/components/schemas/DefaultSelection_Prisma._36_UserPayload_",
 				"description": "Model User"
+			},
+			"UserType": {
+				"$ref": "#/components/schemas/User"
+			},
+			"Pick_User.Exclude_keyofUser.password__": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"id": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"role": {
+						"$ref": "#/components/schemas/_36_Enums.Role"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"name",
+					"id",
+					"email",
+					"role",
+					"createdAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_User.password_": {
+				"$ref": "#/components/schemas/Pick_User.Exclude_keyofUser.password__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"SafeUser": {
+				"$ref": "#/components/schemas/Omit_User.password_"
+			},
+			"CreateUserDto": {
+				"properties": {
+					"password": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"password",
+					"email",
+					"name"
+				],
+				"type": "object"
+			},
+			"UpdateUserDto": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
 			},
 			"Restaurant": {
 				"properties": {
@@ -223,69 +296,31 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"RegisterBody": {
-				"properties": {
-					"name": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"password": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"name",
-					"email",
-					"password"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"TokenResponse": {
 				"properties": {
-					"accessToken": {
-						"type": "string"
-					},
-					"refreshToken": {
+					"token": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"accessToken",
-					"refreshToken"
+					"token"
 				],
-				"type": "object",
-				"additionalProperties": false
+				"type": "object"
 			},
-			"LoginBody": {
+			"LoginDto": {
 				"properties": {
-					"email": {
-						"type": "string"
-					},
 					"password": {
 						"type": "string"
-					}
-				},
-				"required": [
-					"email",
-					"password"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
-			"RefreshBody": {
-				"properties": {
-					"refreshToken": {
+					},
+					"email": {
 						"type": "string"
 					}
 				},
 				"required": [
-					"refreshToken"
+					"password",
+					"email"
 				],
-				"type": "object",
-				"additionalProperties": false
+				"type": "object"
 			}
 		},
 		"securitySchemes": {}
@@ -310,7 +345,7 @@
 								"schema": {
 									"allOf": [
 										{
-											"$ref": "#/components/schemas/User"
+											"$ref": "#/components/schemas/UserType"
 										}
 									],
 									"nullable": true
@@ -333,6 +368,45 @@
 						}
 					}
 				]
+			},
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SafeUser"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateUserDto"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/users/register": {
@@ -344,7 +418,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/User"
+									"$ref": "#/components/schemas/SafeUser"
 								}
 							}
 						}
@@ -360,23 +434,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"properties": {
-									"password": {
-										"type": "string"
-									},
-									"email": {
-										"type": "string"
-									},
-									"name": {
-										"type": "string"
-									}
-								},
-								"required": [
-									"password",
-									"email",
-									"name"
-								],
-								"type": "object"
+								"$ref": "#/components/schemas/CreateUserDto"
 							}
 						}
 					}
@@ -393,7 +451,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/User"
+										"$ref": "#/components/schemas/UserType"
 									},
 									"type": "array"
 								}
@@ -426,6 +484,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Restaurants"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -470,6 +531,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Restaurants"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -501,6 +565,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Restaurants"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -537,6 +604,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Orders"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -566,6 +636,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Orders"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -597,6 +670,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Orders"
+				],
 				"security": [],
 				"parameters": []
 			}
@@ -624,6 +700,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Orders"
+				],
 				"security": [],
 				"parameters": [
 					{
@@ -662,6 +741,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Coupons"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -670,43 +752,6 @@
 						"application/json": {
 							"schema": {
 								"$ref": "#/components/schemas/ValidateCouponBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/auth/register": {
-			"post": {
-				"operationId": "Register",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"properties": {
-										"message": {
-											"type": "string"
-										}
-									},
-									"required": [
-										"message"
-									],
-									"type": "object"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/RegisterBody"
 							}
 						}
 					}
@@ -728,6 +773,9 @@
 						}
 					}
 				},
+				"tags": [
+					"Auth"
+				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
@@ -735,36 +783,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"$ref": "#/components/schemas/LoginBody"
-							}
-						}
-					}
-				}
-			}
-		},
-		"/auth/refresh": {
-			"post": {
-				"operationId": "Refresh",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/TokenResponse"
-								}
-							}
-						}
-					}
-				},
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/RefreshBody"
+								"$ref": "#/components/schemas/LoginDto"
 							}
 						}
 					}
