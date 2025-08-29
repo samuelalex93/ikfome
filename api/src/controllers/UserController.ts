@@ -1,9 +1,10 @@
-import { Controller, Get, Route, Tags, Post, Body, Path, Put } from "tsoa";
+import { Controller, Get, Route, Tags, Post, Body, Path, Put, Security } from "tsoa";
 
 import { UserService } from "../services/UserService";
-import { CreateUserDto, UpdateUserDto, UserType, SafeUser } from "../types/UserTypes";
+import { CreateUserDto, UpdateUserDto, SafeUser } from "../types/UserTypes";
 @Route("users")
 @Tags("Users")
+@Security("jwt")
 export class UserController extends Controller {
   private userService: UserService;
 
@@ -13,7 +14,7 @@ export class UserController extends Controller {
   }
 
   @Get("{id}")
-  public async getUser(@Path() id: string): Promise<UserType | null> {
+  public async getUser(@Path() id: string): Promise<SafeUser | null> {
     return this.userService.getUserById(id);
   }
 
@@ -33,7 +34,7 @@ export class UserController extends Controller {
   }
 
   @Get()
-  public async listUsers(): Promise<UserType[]> {
+  public async listUsers(): Promise<SafeUser[]> {
     return this.userService.listUsers();
   }
 }

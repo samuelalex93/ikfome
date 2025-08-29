@@ -1,9 +1,17 @@
 import prisma from "../config/prisma"
-import { CreateUserDto, UpdateUserDto, UserType } from "../types/UserTypes";
+import { CreateUserDto, SafeUser, UpdateUserDto, UserType } from "../types/UserTypes";
 
 export class UserRepository {
-  async findById(id: string): Promise<UserType | null> {
-    return prisma.user.findUnique({ where: { id } });
+  async findById(id: string): Promise<SafeUser | null> {
+    return prisma.user.findUnique({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      }, where: { id }
+    });
   }
 
   async findByEmail(email: string): Promise<UserType | null> {
@@ -22,7 +30,16 @@ export class UserRepository {
     });
   }
 
-  async listAll(): Promise<UserType[]> {
-    return prisma.user.findMany();
+  async listAll(): Promise<SafeUser[]> {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      }
+    });
+    return users
   }
 }

@@ -10,10 +10,11 @@ export class UserService {
     this.userRepository = new UserRepository();
   }
 
-  async getUserById(id: string): Promise<User | null> {
+  async getUserById(id: string): Promise<SafeUser | null> {
     return this.userRepository.findById(id);
   }
-  async getUserByEmail(email: string): Promise<User | null> {
+  
+  async getUserByEmail(email: string): Promise<SafeUser | null> {
     return this.userRepository.findByEmail(email);
   }
 
@@ -32,7 +33,7 @@ export class UserService {
     return userWithoutPassword;
   }
 
-  async listUsers(): Promise<User[]> {
+  async listUsers(): Promise<SafeUser[]> {
     return this.userRepository.listAll();
   }
 
