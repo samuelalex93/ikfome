@@ -741,7 +741,7 @@
 				}
 			}
 		},
-		"/auth/login": {
+		"/login": {
 			"post": {
 				"operationId": "Login",
 				"responses": {
@@ -757,7 +757,7 @@
 					}
 				},
 				"tags": [
-					"Auth"
+					"Login"
 				],
 				"security": [],
 				"parameters": [],
