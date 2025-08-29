@@ -1,5 +1,6 @@
 import { ValidateError } from "@tsoa/runtime";
 import { Request, Response, NextFunction } from "express";
+import { NotFoundError, InvalidPasswordError, ForbiddenError } from "../errors/CustomError";
 
 export function errorHandler(
   err: unknown,
@@ -12,6 +13,12 @@ export function errorHandler(
     return res.status(422).json({
       message: "Validation Failed",
       details: err?.fields,
+    });
+  }
+
+  if (err instanceof NotFoundError || err instanceof InvalidPasswordError || err instanceof ForbiddenError) {
+    return res.status(err.statusCode).json({
+      message: err.message,
     });
   }
 
