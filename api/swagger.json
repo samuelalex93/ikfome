@@ -14,45 +14,6 @@
 					"ADMIN"
 				]
 			},
-			"DefaultSelection_Prisma._36_UserPayload_": {
-				"properties": {
-					"createdAt": {
-						"type": "string",
-						"format": "date-time"
-					},
-					"role": {
-						"$ref": "#/components/schemas/_36_Enums.Role"
-					},
-					"password": {
-						"type": "string"
-					},
-					"email": {
-						"type": "string"
-					},
-					"id": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"createdAt",
-					"role",
-					"password",
-					"email",
-					"id",
-					"name"
-				],
-				"type": "object"
-			},
-			"User": {
-				"$ref": "#/components/schemas/DefaultSelection_Prisma._36_UserPayload_",
-				"description": "Model User"
-			},
-			"UserType": {
-				"$ref": "#/components/schemas/User"
-			},
 			"Pick_User.Exclude_keyofUser.password__": {
 				"properties": {
 					"name": {
@@ -323,7 +284,13 @@
 				"type": "object"
 			}
 		},
-		"securitySchemes": {}
+		"securitySchemes": {
+			"jwt": {
+				"type": "apiKey",
+				"name": "Authorization",
+				"in": "header"
+			}
+		}
 	},
 	"info": {
 		"title": "api",
@@ -345,7 +312,7 @@
 								"schema": {
 									"allOf": [
 										{
-											"$ref": "#/components/schemas/UserType"
+											"$ref": "#/components/schemas/SafeUser"
 										}
 									],
 									"nullable": true
@@ -357,7 +324,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -386,7 +357,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -427,7 +402,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -451,7 +430,7 @@
 							"application/json": {
 								"schema": {
 									"items": {
-										"$ref": "#/components/schemas/UserType"
+										"$ref": "#/components/schemas/SafeUser"
 									},
 									"type": "array"
 								}
@@ -462,7 +441,11 @@
 				"tags": [
 					"Users"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": []
 			}
 		},

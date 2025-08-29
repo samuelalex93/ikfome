@@ -5,9 +5,17 @@
   "spec": {
     "outputDirectory": "./",
     "specVersion": 3,
-    "basePath": "/"
+    "basePath": "/",
+    "securityDefinitions": {
+      "jwt": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
   },
   "routes": {
-    "routesDir": "src/routes"
+    "routesDir": "src/routes",
+    "authenticationModule": "src/middleware/authMiddleware.ts"
   }
 }
