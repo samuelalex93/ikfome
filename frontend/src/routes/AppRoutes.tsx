@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import type React from "react";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
+import MainLayout from "../components/MainLayout";
 
 function PrivateRoute({ children }: { children: React.ReactElement }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -23,18 +24,11 @@ export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route element={<MainLayout />}>
+          <Route path="/home" element={<Home />} />
+        </Route>
         <Route path="/login" element={<Login />} />
-
-        <Route
-          path="/home"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
-
-        <Route path="*" element={<Navigate to="/login" />} />
+        <Route path="*" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
